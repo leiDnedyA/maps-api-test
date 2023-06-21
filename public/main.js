@@ -5,6 +5,9 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
 
-fetch('/api/directions/123/456')
-.then((res)=>res.text())
-.then((json)=>{ console.log(json) });
+L.Routing.control({
+    waypoints: [
+        L.latLng(41.98285088332745, -71.36393262052391),
+        L.latLng(41.98626463081817, -71.33170362108166)
+    ]
+}).addTo(map);
