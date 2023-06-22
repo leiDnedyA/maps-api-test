@@ -8,4 +8,4 @@ const newWaypoints = [
     new L.LatLng(42.37100429088682, -71.07985437331664)
 ]
 
-mapControls.setWaypoints(newWaypoints);
+console.log(mapControls.getUserLocation());

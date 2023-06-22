@@ -15,12 +15,12 @@ const defaultLocation = new L.LatLng(42.354355186763065, -71.0654977491553);
 class MapController {
     _map;
     _control;
-    _currLocation;
+    _userLocation;
 
     constructor(elementID, initLocation = defaultLocation) {
 
         const map = L.map(elementID).setView([41.9696, -71.3565], 13);
-        const currLocation = L.marker(initLocation);
+        const userLocation = new L.marker(initLocation);
 
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
@@ -37,11 +37,11 @@ class MapController {
         control.addTo(map);
         control.hide();
 
-        currLocation.addTo(map);
+        userLocation.addTo(map);
 
         this._map = map;
         this._control = control;
-        this._currLocation = currLocation;
+        this._userLocation = userLocation;
     }
 
     /**
@@ -54,11 +54,31 @@ class MapController {
     }
 
     /**
-     * Returns the current waypoints
+     * Returns the current waypoints.
+     * 
      * @returns {LatLng[]} Current waypoints represented by LatLng objects
      */
     getWaypoints() {
         return this._control.options.waypoints;
+    }
+    
+    /**
+     * Returns the current stored value of the user location.
+     * WARNING: not the user's actual location, just the location currently stored for map use
+     * 
+     * @returns {LatLng} Current value stored for user location.
+     */
+    getUserLocation() {
+        return this._userLocation.getLatLng();
+    }
+
+    /**
+     * Sets the user's location to a new location.
+     * 
+     * @param {LatLng} newLocation
+     */
+    setUserLocation(newLocation) {
+        this._userLocation.setLatLng(newLocation);
     }
 
 }
