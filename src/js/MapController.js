@@ -7,50 +7,60 @@
 
 import * as L from 'leaflet';
 import 'leaflet-routing-machine';
-
 // import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 
-// Set route
-
-// Get route
-
-// Add stops
-
-// Remove stops
-
-// Set current location
+// Boston Common
+const defaultLocation = new L.LatLng(42.354355186763065, -71.0654977491553);
 
 class MapController {
-    // _map;
-    // _control;
+    _map;
+    _control;
+    _currLocation;
 
-    constructor(elementID) {
+    constructor(elementID, initLocation = defaultLocation) {
+
         const map = L.map(elementID).setView([41.9696, -71.3565], 13);
+        const currLocation = L.marker(initLocation);
 
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
 
-        const waypoints = [
-            L.latLng(41.98285088332745, -71.36393262052391),
-            L.latLng(41.98626463081817, -71.33170362108166)
-        ]
-
         const control = L.Routing.control({
-            waypoints: waypoints,
+            waypoints: [],
             routeWhileDragging: false,
             draggableWaypoints: false,
             addWaypoints: false,
-            autoRoute: false
         });
-
-        control.route();
 
         control.addTo(map);
         control.hide();
 
+        currLocation.addTo(map);
+
+        this._map = map;
+        this._control = control;
+        this._currLocation = currLocation;
     }
+
+    /**
+     * Update route to have a new set of waypoints.
+     * 
+     * @param {LatLng[]} waypoints new set of waypoints for route 
+     */
+    setWaypoints(waypoints) {
+        this._control.setWaypoints(waypoints);
+    }
+
+    /**
+     * Returns the current waypoints
+     * @returns {LatLng[]} Current waypoints represented by LatLng objects
+     */
+    getWaypoints() {
+        return this._control.options.waypoints;
+    }
+
 }
 
 export default MapController;
