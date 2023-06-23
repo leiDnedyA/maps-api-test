@@ -1,5 +1,6 @@
 import * as L from 'leaflet';
 import MapController from './js/MapController';
+import { findByRadius } from './js/StoreLookup';
 
 const mapControls = new MapController('map');
 
@@ -12,9 +13,8 @@ const newWaypoints = [
 navigator.geolocation.getCurrentPosition(
     (pos) => {
         mapControls.setUserLocation(new L.LatLng(pos.coords.latitude, pos.coords.longitude));
-        fetch(`/api/searchCircle/pos/${pos.coords.latitude},${pos.coords.longitude}/rad/${10000}`)
-            .then((res)=>res.json())
-            .then((result)=>{console.log(result)});
+        findByRadius([pos.coords.latitude, pos.coords.longitude], 10000)
+        .then(result=>{ console.log(result) })
     },
     (err) => {
         console.error(err);
