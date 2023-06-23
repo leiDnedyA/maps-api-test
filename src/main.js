@@ -12,7 +12,7 @@ const newWaypoints = [
 
 navigator.geolocation.getCurrentPosition(
     (pos) => {
-        mapControls.setUserLocation(new L.LatLng(pos.coords.latitude, pos.coords.longitude));
+        mapControls.setUserLocation(new L.LatLng(pos.coords.latitude, pos.coords.longitude), true);
         findByRadius([pos.coords.latitude, pos.coords.longitude], 10000)
         .then(result=>{ console.log(result) })
     },
@@ -21,4 +21,4 @@ navigator.geolocation.getCurrentPosition(
     }
 )
 
-mapControls.setWaypoints(newWaypoints);
+// mapControls.setWaypoints(newWaypoints);

@@ -37,6 +37,7 @@ class MapController {
         control.addTo(map);
         control.hide();
 
+        userLocation.bindTooltip("Your are here").openTooltip();
         userLocation.addTo(map);
 
         this._map = map;
@@ -61,7 +62,7 @@ class MapController {
     getWaypoints() {
         return this._control.options.waypoints;
     }
-    
+
     /**
      * Returns the current stored value of the user location.
      * WARNING: not the user's actual location, just the location currently stored for map use
@@ -75,9 +76,13 @@ class MapController {
     /**
      * Sets the user's location to a new location.
      * 
-     * @param {LatLng} newLocation
+     * @param {LatLng} newLocation new user location
+     * @param {boolean} updateMapCenter whether or not to re-center the map view on the new location
      */
-    setUserLocation(newLocation) {
+    setUserLocation(newLocation, updateMapCenter = false) {
+        if (updateMapCenter) {
+            this._map.setView(newLocation);
+        }
         this._userLocation.setLatLng(newLocation);
     }
 
