@@ -48,10 +48,38 @@ class MapController {
     /**
      * Update route to have a new set of waypoints.
      * 
-     * @param {LatLng[]} waypoints new set of waypoints for route 
+     * @param {{point: LatLng[], name: string}} waypoints new set of waypoints for route 
      */
     setWaypoints(waypoints) {
-        this._control.setWaypoints(waypoints);
+        const names = [];
+        const points = [];
+        
+        // Convert waypoints arg to parallel lists of names and points
+        waypoints.forEach(wp => {
+            names.push(wp.name);
+            points.push(wp.point)
+        });
+
+        // Re-instantiate _control
+        this._map.removeControl(this._control);
+        
+        /**
+         * Method for adding markers based on issue:
+         * https://github.com/perliedman/leaflet-routing-machine/issues/271
+         */
+        const newControl = L.routing.control({
+            waypoints: points,
+            routeWhileDragging: false,
+            draggableWaypoints: false,
+            addWaypoints: false,
+            createMarker: function(i, wp, nWps) {
+                console.log(names[i])
+                return L.marker(wp.latLng).bindPopup(names[i]);
+            }
+        })
+
+        newControl.addTo(this._map);
+        this._control = newControl;
     }
 
     /**
